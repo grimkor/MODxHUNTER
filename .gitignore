@@ -1,0 +1,6 @@
+﻿deps/
+bin/
+obj/
+
+.idea/
+Folder.DotSettings.user
