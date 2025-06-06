@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Nullable>enable</Nullable>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>grimbahack_hxh</AssemblyName>
-    <Product>My first plugin</Product>
+    <AssemblyName>modxhunter</AssemblyName>
+    <Product>MODxHUNTER</Product>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
@@ -12,7 +13,7 @@
       https://nuget.bepinex.dev/v3/index.json;
       https://nuget.samboy.dev/v3/index.json
     </RestoreAdditionalProjectSources>
-    <RootNamespace>grimbahack_hxh</RootNamespace>
+    <RootNamespace>modxhunter</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

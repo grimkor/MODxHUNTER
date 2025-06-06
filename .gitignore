@@ -1,6 +1,7 @@
 ﻿deps/
 bin/
 obj/
+!**/.gitkeep
 
 .idea/
 Folder.DotSettings.user
