@@ -1,6 +1,7 @@
 ﻿deps/
 bin/
 obj/
+out/
 !**/.gitkeep
 
 .idea/

@@ -44,9 +44,8 @@ public  class ColliderViewer
 
     public void Init()
     {
-        var x = 0;
         Instance.Cleanup();
-        Plugin.Log.LogInfo("Running Init");
+        Plugin.Log.LogInfo("Initialising Collider Viewer.");
         var bsm = BattleSystemManager.Instance;
         var teamOne = bsm.Team.GetTeamEntry(CharacterTeam.Alpha);
         var teamTwo = bsm.Team.GetTeamEntry(CharacterTeam.Bravo);
@@ -54,6 +53,10 @@ public  class ColliderViewer
         if (Instance._behaviour == null)
         {
             createObjects = true;
+            Instance._characterOverlays.ForEach(overlay =>
+            {
+                overlay.ParentGameObject.Destroy();
+            });
             Instance._characterOverlays.Clear();
             var go = new GameObject("ColliderViewerBehaviour")
             {
@@ -176,7 +179,7 @@ public  class ColliderViewer
         var facingLeft = character.Direction == ObjectDirection.Left;
         for (int i = 0; i < colliders.Count; i++)
         {
-            Draw(renderTargets[i], colliders[i], new(character.PositionX, character.PositionY), facingLeft);
+            Draw(renderTargets[i], colliders[i], new(character.PositionX, character.PositionY), facingLeft, type == HitBoxType.Damage);
         }
         if (colliders.Count < renderTargets.Count)
         {
@@ -210,7 +213,7 @@ public  class ColliderViewer
         box.gameObject.SetActive(true);
     }
 
-    private void Draw((Transform, SpriteRenderer) renderTargets, Box2DCollider collider, Vector2 rootPosition, bool reverse = false)
+    private void Draw((Transform, SpriteRenderer) renderTargets, Box2DCollider collider, Vector2 rootPosition, bool reverse = false, bool isDamage = false)
     {
             var box = renderTargets.Item1;
             var sprite = renderTargets.Item2;
@@ -222,7 +225,7 @@ public  class ColliderViewer
                  + mod * (float)collider._position.x / 1000
                  + sizeDelta.x,
                 (rootPosition.y / 1000) + (float)collider._position.y / 1000 + sizeDelta.y,
-                0
+                isDamage ? -0.1f : 0
             );
             box.gameObject.SetActive(true);
     }
@@ -363,9 +366,9 @@ public static class CollisionColors {
 
 public class RenderBoxData
 {
-    public Vector2 RootPosition = new();
-    public Vector2 Offset = new();
-    public Vector2 Size = new();
+    public Vector2 RootPosition;
+    public Vector2 Offset;
+    public Vector2 Size;
     public Box2DCollider? Collider;
     public ObjectDirection DirectionFacing = ObjectDirection.None;
     public HitBoxType Type = HitBoxType.Attack;

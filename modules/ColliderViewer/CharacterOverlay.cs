@@ -20,14 +20,29 @@ public class CharacterOverlay
 
     private readonly List<(Transform, SpriteRenderer)> _attackRenderers = new();
     private readonly List<(Transform, SpriteRenderer)> _damageRenderers = new();
-    private protected readonly Texture2D _tex = new(512, 512, TextureFormat.ARGB32, false);
-    protected Sprite _sprite = new();
+    private protected readonly Texture2D TEX = new(512, 512, TextureFormat.ARGB32, false);
+    private protected readonly Texture2D TEXAttack = new(512, 512, TextureFormat.ARGB32, false);
+    private protected readonly Texture2D TEXDamage = new(512, 512, TextureFormat.ARGB32, false);
+    protected readonly Sprite SpriteAttack = new();
+    protected readonly Sprite SpriteDamage = new();
 
     public CharacterOverlay(PlayableCharacterCore player)
     {
         _owner = player;
-        _sprite = Sprite.Create(
-            _tex,
+        TEXAttack.SetPixels(Enumerable.Repeat(Color.white, 512 * 512).ToArray());
+        TEXAttack.Apply();
+        TEXDamage.SetPixels(Enumerable.Repeat(Color.white, 512 * 512).ToArray());
+        TEXDamage.Apply();
+        SpriteAttack = Sprite.Create(
+            TEXAttack,
+            new(1, 1, 256, 256),
+            Vector2.one,
+            128,
+            UInt32.MinValue,
+            SpriteMeshType.FullRect
+        );
+        SpriteDamage = Sprite.Create(
+            TEXDamage,
             new(1, 1, 256, 256),
             Vector2.one,
             128,
@@ -48,7 +63,7 @@ public class CharacterOverlay
 
     protected void InitParent(string id)
     {
-        _tex.Apply();
+        TEX.Apply();
         ParentGameObject.name = $"mxh-overlay-{id}";
         ParentGameObject.hideFlags = HideFlags.HideAndDontSave;
         Object.DontDestroyOnLoad(ParentGameObject);
@@ -63,7 +78,7 @@ public class CharacterOverlay
             overlayObj.SetParent(ParentGameObject);
             var rectTransform = overlayObj.AddComponent<RectTransform>();
             var sprite = overlayObj.AddComponent<SpriteRenderer>();
-            sprite.sprite = _sprite;
+            sprite.sprite = SpriteDamage;
             sprite.size = Vector2.one;
             sprite.drawMode = SpriteDrawMode.Tiled;
             sprite.color = CollisionColors.Colors[HitBoxType.Damage];
@@ -81,7 +96,7 @@ public class CharacterOverlay
             overlayObj.SetParent(ParentGameObject);
             var rectTransform = overlayObj.AddComponent<RectTransform>();
             var sprite = overlayObj.AddComponent<SpriteRenderer>();
-            sprite.sprite = _sprite;
+            sprite.sprite = SpriteAttack;
             sprite.size = Vector2.one;
             sprite.drawMode = SpriteDrawMode.Tiled;
             sprite.color = CollisionColors.Colors[HitBoxType.Attack];
@@ -123,14 +138,7 @@ public class SubCharacterOverlay : CharacterOverlay
     public SubCharacterOverlay(SubCharacterCore? owner)
     {
         _owner = owner;
-        _sprite = Sprite.Create(
-            _tex,
-            new(1, 1, 256, 256),
-            Vector2.one,
-            128,
-            UInt32.MinValue,
-            SpriteMeshType.FullRect
-        );
+        if (_owner == null) return;
         InitParent(_owner.SubCharaId);
         GenerateAttackBoxObjects(_owner.CharacterId, 20);
     }
@@ -152,10 +160,12 @@ public class SubCharacterOverlay : CharacterOverlay
 
     public ObjectDirection GetCharacterDirection()
     {
+        if (_owner == null) return ObjectDirection.None;
         return _owner.Direction;
     }
 
     public override Vector2 GetCharacterPosition() {
+        if (_owner == null) return new(0, 0);
         return new(_owner.PositionX, _owner.PositionY);
     }
 
