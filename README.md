@@ -8,6 +8,9 @@ Mod for HUNTERxHUNTER NENxIMPACT on the PC.
 4. Profit.
 
 # Features
-* Collision Box Viewer (Press F1 in a match to activate)
+* Collision Box Viewer
+* Green Screen background.
+
+To access the features press F1 to load the mod menu in-game.
 
 More to come once the game is released, I want to see what is in the final version.
