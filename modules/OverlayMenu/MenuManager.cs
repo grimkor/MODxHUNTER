@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using modxhunter.modules.PostProcessing;
+using modxhunter.modules.TextureLoader;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -39,9 +40,11 @@ public class MenuManager
             case Windows.MainMenu:
                 return Instance._gameObject.AddComponent<MenuOverlay>();
             case Windows.PostProcessing:
-                return _gameObject.AddComponent<MenuPostProcessing>();
+                return Instance._gameObject.AddComponent<MenuPostProcessing>();
             case Windows.GreenScreen:
-                return _gameObject.AddComponent<MenuGreenScreen>();
+                return Instance._gameObject.AddComponent<MenuGreenScreen>();
+            case Windows.Textures:
+                return Instance._gameObject.AddComponent<MenuTextureLoader>();
             default:
                 throw new ArgumentOutOfRangeException(nameof(id), id, null);
         }
@@ -157,5 +160,6 @@ public enum Windows
 {
     MainMenu,
     PostProcessing,
-    GreenScreen
+    GreenScreen,
+    Textures
 }

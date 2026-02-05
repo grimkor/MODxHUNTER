@@ -69,6 +69,10 @@ public class MenuOverlay : WindowBase
         {
             MenuManager.Instance.Toggle(Windows.PostProcessing);
         }
+        if (GUILayout.Button("Custom Textures"))
+        {
+            MenuManager.Instance.Toggle(Windows.Textures);
+        }
         GUI.enabled = true;
         GUILayout.EndScrollView();
         GUI.DragWindow();
